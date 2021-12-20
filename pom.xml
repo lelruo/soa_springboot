@@ -14,7 +14,7 @@
     <name>springbootcourse</name>
     <description>springbootcourse</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>1.8</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -43,27 +43,12 @@
 
     <build>
         <plugins>
-        <plugin>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-maven-plugin</artifactId>
-    <executions>
-        <execution>
-            <goals>
-                <goal>repackage</goal>
-            </goals>
-        </execution>
-    </executions>
-  
-    <configuration>
-         <includeSystemScope>true</includeSystemScope>
-         <mainClass>xxx.xxx.xxx.xxx</mainClass>
-    </configuration>
-</plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
+ 
 
 </project>
