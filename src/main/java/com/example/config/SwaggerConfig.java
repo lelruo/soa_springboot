@@ -31,6 +31,7 @@ public class SwaggerConfig {
                 .select()
                 //扫描com.au.sa包下文件
                 .apis(RequestHandlerSelectors.basePackage("com.example.controller"))
+//                .apis(RequestHandlerSelectors.basePackage("com.example.feighClient"))
                 //扫描@Api注解的类
                 .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
                 //扫描@ApiOperation注解的方法
@@ -47,6 +48,4 @@ public class SwaggerConfig {
                 .version("1.0")
                 .build();
     }
-
-
 }

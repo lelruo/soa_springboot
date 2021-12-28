@@ -1,81 +1,54 @@
 package com.example.controller;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.web.bind.annotation.*;
+
 
 @Api(tags = "地图接口")
 @CrossOrigin
 @RestController
 public class Controller {
+//    @Resource
+//    private GetPositionService getPositionService;
+    public String[][] location;
 
-    @ApiOperation("查询列表（不分页）")
+    @RabbitListener(queues ="position")
+    public void ListenMQ(String msg) {
+        System.out.println(msg);
+//        string转jsonArray
+        JSONArray jsonArray = JSONArray.parseArray(msg);
+        System.out.println(jsonArray);
+//       将收到的数据录入position数组
+        String[][] position = new String[jsonArray.size()/5][2];
+        if(jsonArray.size()>0){
+            for (int i = 0; i < jsonArray.size()/5; i=i+5) {
+//                    jsonArray转object
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                position[i][0] = jsonObject.getString("jing");
+                position[i][1] = jsonObject.getString("wei");
+                System.out.println(position[i][0]+","+position[i][1]);
+            }
+//                String[] data=Arrays.toString(position);
+//                System.out.println(Arrays.toString(position));
+        }
+        this.location=position;
+////        return position;
+//        this.Location=position;
+//        System.out.println(this.Location);
+    }
+
+    @ApiOperation("监控查询")
     @RequestMapping(value="/map",method = RequestMethod.GET)
     @ResponseBody
-    public double[][] sendLocation(){
-        double[][] data={
-                {30.620411,	104.082701},
-                {30.701265,	104.006918},
-                {30.652442, 104.0784},
-                {30.645155,104.033364},
-                {30.63948,	104.098398},
-                {30.617586,	104.092072},
-                {30.67374,	103.976658},
-                {30.671268,	104.060719},
-                {30.670503,	104.021277},
-                {30.678119,	104.112535},
-                {30.660196,	104.060818},
-                {30.633322,	104.056359},
-                {30.553225,	103.914438},
-                {30.677831,	104.071729},
-                {30.61629,	104.098768},
-                {30.663796,	104.0605},
-                {30.694465,	103.965016},
-                {30.650287,	104.082876},
-                {30.685671,	104.024805},
-                {30.68917,	104.035121},
-                {30.673922,	103.97569},
-                {30.638947,	103.992963},
-                {30.634502,	104.0522},
-                {30.667393,104.021516},
-                {30.638353,	104.129631},
-                {30.683955,	104.04995},
-                {30.666786,	104.163033},
-                {30.694485,	104.07779},
-                {30.64744,	104.022613},
-                {30.68607,	104.073091},
-                {30.736858,	104.21122},
-                {30.646615,	104.074852},
-                {30.663741,	104.0605},
-                {30.626585,	104.044093},
-                {30.658866,	104.071367},
-                {30.589188,	104.060244},
-                {30.61243,	104.081618},
-                {30.666085,	104.003385},
-                {30.600578,	104.067508},
-                {30.686054,	104.063522},
-                {30.671219,	104.060508},
-                {30.669513,	104.055365},
-                {30.763165,	104.117976},
-                {30.701225,	104.057356},
-                {30.620304,	104.076316},
-                {30.626975,	104.150813},
-                {30.662626,	104.002158},
-                {30.65924,	104.021876},
-                {30.640011,	104.155588},
-                {30.628855,	104.0907},
-                {30.623212,	104.050842},
-                {30.679476,	104.122159},
-                {30.684181,	104.095354},
-                {30.685165,	104.055182},
-                {30.622154,104.052509},
-                {30.674093,	104.093037},
-                {30.312903,120.382029},
-                {30.215855,120.024568},
-                {30.18015,120.174968},
-                {30.324994,120.164399},
-                {30.24884,120.305074}
-        };
+    public  String[][] sendLocation() {
+//        getPositionService.Location
+//        GetPositionService getPositionService=new GetPositionService();
+        String[][] data= this.location;
         return data;
     }
+
 }
